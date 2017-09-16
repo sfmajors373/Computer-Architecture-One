@@ -52,7 +52,7 @@ def executeInstructions(Data):
     #for line in Data:
     with open(args.filename, 'r') as f:
         line = f.readline()
-        print('next line')
+        print(line)
         # if the line is not commented out
         if isCommented(line) == True:
             line = f.readline()
