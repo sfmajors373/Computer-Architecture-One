@@ -7,7 +7,6 @@ import time
 parser = argparse.ArgumentParser(description = "runOnMicroArchitecture")
 parser.add_argument("filename",help = "filenameToRun")
 args = parser.parse_args()
-Data = open(args.filename, "r")
 
 # is the line commented out
 def isCommented(line):
@@ -50,10 +49,14 @@ registers = {
 def executeInstructions(Data):
     instructions = []
     # register = []
-    for line in Data:
+    #for line in Data:
+    with open(args.filename, 'r') as f:
+        line = f.readline()
         print('next line')
         # if the line is not commented out
-        if isCommented(line) == False:
+        if isCommented(line) == True:
+            line = f.readline()
+        elif isCommented(line) == False:
             line = line.strip()
             temp = line.split(" ")
             # extract the 8 digits I need
@@ -71,7 +74,6 @@ def executeInstructions(Data):
                     instructions.pop()
                     print('registers initialized')
                     print(instructions)
-                    time.sleep(1)
                 elif instructions[0] == 'set register':
                     reg = binToDec(binaryStr)
                     instructions.append(reg)
@@ -79,7 +81,7 @@ def executeInstructions(Data):
                 else:
                     print('we have a problem with instruction[0]')
                     print(instructions)
-                    break;
+                    # break
             # if there are exactly 2 instruction in list
             elif len(instructions) == 2:
                 instructions.append(dict[binaryStr])
@@ -95,17 +97,17 @@ def executeInstructions(Data):
                 elif instruction[2] == 'print':
                     if instructions[1] == 0:
                         print(registers[reg0])
-                        break;
+                        # break
                     elif instructions[1] == 1:
                         print(registers[reg1])
-                        break;
+                        # break
                     elif instructions[1] == 2:
                         print(registers[reg2])
-                        break;
+                        # break
                     elif instructions[1] == 3:
                         print(registers[reg3])
                         instructions.clear()
-                        break;
+                        # break
                     else:
                         print('error with finding register for instructions[1]')
                 else:
@@ -148,9 +150,9 @@ def executeInstructions(Data):
                         instructions.clear()
                     else:
                         print('register in instructions[1] not found to save to')
-
                 else:
                     print('the instructions list is too long to not be multiplying')
+
             # else:
             #     print('the length of instructions is not accounted for')
             #     print(len(instructions))
@@ -160,9 +162,7 @@ def executeInstructions(Data):
 # CPU to read instructions starting at 0
 # Array containing ASCII values --> register
 
-executeInstructions(Data)
-
-Data.close()
+executeInstructions(args.filename)
 
 ############################# TESTS #####################################
 # print(initialize({1: 'a', 2: 'b', 3: 'c'}))
